@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS products (
+CREATE TABLE IF NOT EXISTS produtos (
     id CHAR(36) NOT NULL PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
     descricao TEXT,
@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS products (
     quantidade_em_stock INT NOT NULL DEFAULT 0
 );
 
-INSERT INTO products (id, nome, descricao, preco, url_imagem, quantidade_em_stock)
+INSERT INTO produtos (id, nome, descricao, preco, url_imagem, quantidade_em_stock)
 VALUES
     (UUID(), 'Notebook Dell Inspiron', 'Notebook Dell com 16GB RAM e SSD 512GB', 4500.00, 'https://exemplo.com/dell.jpg', 10),
     (UUID(), 'iPhone 14', 'Smartphone Apple com 128GB', 6500.00, 'https://exemplo.com/iphone14.jpg', 5),
