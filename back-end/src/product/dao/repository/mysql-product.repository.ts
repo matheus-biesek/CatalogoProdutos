@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Like } from 'typeorm';
 import { MySqlProduct } from '../entity/mysql-product.entity'; 
@@ -12,42 +12,72 @@ export class MySqlProductRepository implements IProductRepository {
   ) {}
 
   async findAll(options?: FindAllOptions) {
-    const { pagination, sort } = options || {};
-    
-    // Configurar paginação
-    const page = pagination?.page || 1;
-    const limit = pagination?.limit || 10;
-    const skip = (page - 1) * limit;
-    
-    // Configurar ordenação
-    const order: any = {};
-    if (sort) {
-      order[sort.field] = sort.direction.toUpperCase();
+    try {
+      const { pagination, sort } = options || {};
+      
+      // Configurar paginação
+      const page = pagination?.page || 1;
+      const limit = pagination?.limit || 10;
+      const skip = (page - 1) * limit;
+      
+      // Configurar ordenação
+      const order: any = {};
+      if (sort) {
+        // Validar se o campo de ordenação é válido
+        const validSortFields = ['name', 'price', 'description', 'stockQuantity'];
+        if (validSortFields.includes(sort.field)) {
+          order[sort.field] = sort.direction.toUpperCase();
+        }
+      }
+      
+      // Executar consulta com paginação e ordenação
+      const [data, total] = await Promise.all([
+        this.repo.find({
+          order,
+          skip,
+          take: limit
+        }),
+        this.repo.count()
+      ]);
+      
+      return {
+        data,
+        total,
+        page,
+        limit
+      };
+    } catch (error) {
+      throw new InternalServerErrorException('Erro interno do servidor ao buscar produtos');
     }
-    
-    // Executar consulta com paginação e ordenação
-    const [data, total] = await Promise.all([
-      this.repo.find({
-        order,
-        skip,
-        take: limit
-      }),
-      this.repo.count()
-    ]);
-    
-    return {
-      data,
-      total,
-      page,
-      limit
-    };
   }
 
   async findById(id: string) {
-    return this.repo.findOneBy({ id });
+    try {
+      const product = await this.repo.findOneBy({ id });
+      if (!product) {
+        throw new NotFoundException(`Produto com ID ${id} não encontrado`);
+      }
+      return product;
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw new InternalServerErrorException('Erro interno do servidor ao buscar produto');
+    }
   }
 
   async search(term: string) {
-    return this.repo.find({ where: { name: Like(`%${term}%`) } });
+    try {
+      const products = await this.repo.find({ where: { name: Like(`%${term}%`) } });
+      if (!products || products.length === 0) {
+        throw new NotFoundException(`Nenhum produto encontrado com o termo "${term}"`);
+      }
+      return products;
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw new InternalServerErrorException('Erro interno do servidor ao pesquisar produtos');
+    }
   }
 }

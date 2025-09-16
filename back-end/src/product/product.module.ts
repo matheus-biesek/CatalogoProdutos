@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigService } from '@nestjs/config';
 import { ProductService } from './product.service';
+import { ProductController } from './product.controller';
 import { MySqlProductRepository } from './dao/repository/mysql-product.repository';
 import { MongoProductRepository } from './dao/repository/mongo-product.repository';
 import { IProductRepository } from './dao/interface/product.repository';
@@ -23,6 +24,7 @@ export class ProductModule {
           : [TypeOrmModule.forFeature([MySqlProduct])]
         ),
       ],
+      controllers: [ProductController],
       providers: [
         ProductService,
         // Configuração condicional dos repositórios

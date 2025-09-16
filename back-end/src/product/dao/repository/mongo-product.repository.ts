@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { MongoProduct, ProductDocument } from '../entity/mongo-product.entity';
@@ -11,43 +11,73 @@ export class MongoProductRepository implements IProductRepository {
   ) {}
 
   async findAll(options?: FindAllOptions) {
-    const { pagination, sort } = options || {};
-    
-    // Configurar paginação
-    const page = pagination?.page || 1;
-    const limit = pagination?.limit || 10;
-    const skip = (page - 1) * limit;
-    
-    // Configurar ordenação
-    const sortObj: any = {};
-    if (sort) {
-      sortObj[sort.field] = sort.direction === 'asc' ? 1 : -1;
+    try {
+      const { pagination, sort } = options || {};
+      
+      // Configurar paginação
+      const page = pagination?.page || 1;
+      const limit = pagination?.limit || 10;
+      const skip = (page - 1) * limit;
+      
+      // Configurar ordenação
+      const sortObj: any = {};
+      if (sort) {
+        // Validar se o campo de ordenação é válido
+        const validSortFields = ['name', 'price', 'description', 'stockQuantity'];
+        if (validSortFields.includes(sort.field)) {
+          sortObj[sort.field] = sort.direction === 'asc' ? 1 : -1;
+        }
+      }
+      
+      // Executar consulta com paginação e ordenação
+      const [data, total] = await Promise.all([
+        this.productModel
+          .find()
+          .sort(sortObj)
+          .skip(skip)
+          .limit(limit)
+          .exec(),
+        this.productModel.countDocuments().exec()
+      ]);
+      
+      return {
+        data,
+        total,
+        page,
+        limit
+      };
+    } catch (error) {
+      throw new InternalServerErrorException('Erro interno do servidor ao buscar produtos');
     }
-    
-    // Executar consulta com paginação e ordenação
-    const [data, total] = await Promise.all([
-      this.productModel
-        .find()
-        .sort(sortObj)
-        .skip(skip)
-        .limit(limit)
-        .exec(),
-      this.productModel.countDocuments().exec()
-    ]);
-    
-    return {
-      data,
-      total,
-      page,
-      limit
-    };
   }
 
   async findById(id: string) {
-    return this.productModel.findById(id).exec();
+    try {
+      const product = await this.productModel.findById(id).exec();
+      if (!product) {
+        throw new NotFoundException(`Produto com ID ${id} não encontrado`);
+      }
+      return product;
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw new InternalServerErrorException('Erro interno do servidor ao buscar produto');
+    }
   }
 
   async search(term: string) {
-    return this.productModel.find({ name: { $regex: term, $options: 'i' } }).exec();
+    try {
+      const products = await this.productModel.find({ name: { $regex: term, $options: 'i' } }).exec();
+      if (!products || products.length === 0) {
+        throw new NotFoundException(`Nenhum produto encontrado com o termo "${term}"`);
+      }
+      return products;
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw new InternalServerErrorException('Erro interno do servidor ao pesquisar produtos');
+    }
   }
 }

@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, BadRequestException } from '@nestjs/common';
 import type { IProductRepository, FindAllOptions, PaginationOptions, SortOptions } from './dao/interface/product.repository';
 
 @Injectable()
@@ -35,28 +35,14 @@ export class ProductService {
 
   /**
    * Filtra a lista de produtos por nome que contenha o termo de busca (case-insensitive)
-   * GET /api/products?search={term}
+   * GET /api/products/search?term={term}
    */
-  async search(term: string, page?: number, limit?: number, sortField?: string, sortDirection?: 'asc' | 'desc') {
-    const options: FindAllOptions = {};
-    
-    // Configurar paginação se fornecida
-    if (page && limit) {
-      options.pagination = {
-        page: Number(page),
-        limit: Number(limit)
-      };
+  async search(term: string) {
+    if (!term || term.trim().length < 2) {
+      throw new BadRequestException('Termo de busca deve ter pelo menos 2 caracteres');
     }
     
-    // Configurar ordenação se fornecida
-    if (sortField && sortDirection) {
-      options.sort = {
-        field: sortField,
-        direction: sortDirection
-      };
-    }
-    
-    return await this.productRepository.search(term);
+    return await this.productRepository.search(term.trim());
   }
 
   /**
