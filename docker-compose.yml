@@ -1,0 +1,129 @@
+services:
+  backend:
+    build:
+      context: ./back-end
+      dockerfile: Dockerfile
+      target: production
+    container_name: catalogo-backend
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      # Database configuration
+      DB_TYPE: mysql
+
+      # MySQL
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USERNAME: user
+      DB_PASSWORD: userpass
+      DB_NAME: loja
+
+      # MongoDB
+      MONGO_HOST: mongodb
+      MONGO_PORT: 27017
+      MONGO_USERNAME: admin
+      MONGO_PASSWORD: adminpass
+      MONGO_DB: loja
+
+      PORT: 3000
+      NODE_ENV: production
+
+      # CORS configuration
+      CORS_ORIGINS: http://localhost
+    depends_on:
+      - db
+      - mongodb
+    networks:
+      - app_network
+
+  # MySQL Database
+  db:
+    image: mysql:8.0
+    container_name: mysql_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: loja
+      MYSQL_USER: user
+      MYSQL_PASSWORD: userpass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./database/init-mysql.sql:/docker-entrypoint-initdb.d/init-mysql.sql
+    networks:
+      - app_network
+
+  # MongoDB
+  mongodb:
+    image: mongo:7.0
+    container_name: mongodb
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: adminpass
+      MONGO_INITDB_DATABASE: loja
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+      - ./database/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+    networks:
+      - app_network
+
+  # PHPMyAdmin for MySQL
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    restart: always
+    environment:
+      PMA_HOST: db
+      PMA_USER: user
+      PMA_PASSWORD: userpass
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+    networks:
+      - app_network
+
+  # Mongo Express for MongoDB
+  mongo-express:
+    image: mongo-express:1.0.2
+    container_name: mongo-express
+    restart: always
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: adminpass
+      ME_CONFIG_MONGODB_URL: mongodb://admin:adminpass@mongodb:27017/
+      ME_CONFIG_BASICAUTH_USERNAME: admin
+      ME_CONFIG_BASICAUTH_PASSWORD: adminpass
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mongodb
+    networks:
+      - app_network
+
+  # Frontend Angular
+  frontend:
+    build:
+      context: ./front-end
+      dockerfile: Dockerfile
+    container_name: catalogo-frontend
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - app_network
+
+volumes:
+  mysql_data:
+  mongodb_data:
+
+networks:
+  app_network:
+    driver: bridge
