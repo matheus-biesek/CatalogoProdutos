@@ -24,7 +24,7 @@ export class MySqlProductRepository implements IProductRepository {
       const order: any = {};
       if (sort) {
         // Validar se o campo de ordenação é válido
-        const validSortFields = ['name', 'price', 'description', 'stockQuantity'];
+        const validSortFields = ['name', 'price', 'description', 'stockQuantity', 'imageUrl'];
         if (validSortFields.includes(sort.field)) {
           order[sort.field] = sort.direction.toUpperCase();
         }

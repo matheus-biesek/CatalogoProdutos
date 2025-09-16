@@ -23,7 +23,7 @@ export class MongoProductRepository implements IProductRepository {
       const sortObj: any = {};
       if (sort) {
         // Validar se o campo de ordenação é válido
-        const validSortFields = ['name', 'price', 'description', 'stockQuantity'];
+        const validSortFields = ['name', 'price', 'description', 'stockQuantity', 'imageUrl'];
         if (validSortFields.includes(sort.field)) {
           sortObj[sort.field] = sort.direction === 'asc' ? 1 : -1;
         }

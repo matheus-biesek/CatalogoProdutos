@@ -5,6 +5,14 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule.forRoot());
 
+  // Configuração do CORS
+  app.enableCors({
+    origin: ['http://localhost:4200', 'http://127.0.0.1:4200'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+    credentials: true,
+  });
+
   // Configuração do Swagger
   const config = new DocumentBuilder()
     .setTitle('Catálogo de Produtos API')

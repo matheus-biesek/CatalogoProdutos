@@ -62,7 +62,7 @@ export class ProductController {
     name: 'sortField', 
     required: false, 
     description: 'Campo para ordenação',
-    enum: ['name', 'price', 'description', 'stockQuantity'],
+    enum: ['name', 'price', 'description', 'stockQuantity', 'imageUrl'],
     example: 'name'
   })
   @ApiQuery({ 

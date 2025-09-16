@@ -34,6 +34,13 @@ export class ProductResponseDto {
     minimum: 0
   })
   stockQuantity: number;
+
+  @ApiProperty({
+    description: 'URL da imagem do produto',
+    example: 'https://example.com/images/notebook-dell-inspiron-15.jpg',
+    required: false
+  })
+  imageUrl?: string;
 }
 
 export class PaginatedProductsResponseDto {
