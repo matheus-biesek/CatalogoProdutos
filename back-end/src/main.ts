@@ -5,7 +5,6 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule.forRoot());
 
-  // Configuração do CORS
   const allowedOrigins = process.env.CORS_ORIGINS
     ? process.env.CORS_ORIGINS.split(',')
     : ['http://localhost:4200', 'http://127.0.0.1:4200'];
@@ -17,7 +16,6 @@ async function bootstrap() {
     credentials: true,
   });
 
-  // Configuração do Swagger
   const config = new DocumentBuilder()
     .setTitle('Catálogo de Produtos API')
     .setDescription('API para gerenciamento de catálogo de produtos com suporte a MongoDB e MySQL')

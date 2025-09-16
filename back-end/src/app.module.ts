@@ -7,15 +7,16 @@ import { MySqlProduct } from './product/dao/entity/mysql-product.entity';
 
 @Module({})
 export class AppModule {
+  // DynamicModule para configurar o AppModule conforme o banco de dados
   static forRoot(): DynamicModule {
     return {
       module: AppModule,
       imports: [
+        // Configurações globais carregadas do arquivo .env
         ConfigModule.forRoot({
           isGlobal: true,
           envFilePath: '.env',
         }),
-        // Configuração condicional baseada na variável DB_TYPE
         ...(process.env.DB_TYPE === 'mongo' 
           ? [
               MongooseModule.forRootAsync({

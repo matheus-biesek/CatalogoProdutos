@@ -1,119 +1,108 @@
-# 🛍️ Catálogo de Produtos - Frontend Angular
+# 🛍️ Catálogo de Produtos - Frontend
 
-Frontend Angular para o sistema de catálogo de produtos, desenvolvido para consumir a API RESTful do backend NestJS.
+Frontend Angular responsivo para o sistema de catálogo de produtos, desenvolvido com arquitetura moderna e standalone components.
 
-## 🚀 Características
+## 🏗️ Arquitetura
 
-- **Angular 20** com arquitetura standalone components
-- **TypeScript** para tipagem estática
-- **SCSS** para estilos responsivos
-- **HttpClient** para comunicação com API
-- **Router** para navegação entre páginas
-- **Design responsivo** com CSS Grid e Flexbox
-- **Interface moderna** com gradientes e animações
+Este frontend Angular implementa uma arquitetura limpa e modular com componentes standalone, services tipados e interceptors para comunicação com a API.
 
-## 📋 Funcionalidades
+### 📁 Estrutura do Projeto
+
+```
+src/
+├── app/
+│   ├── components/           # Componentes da aplicação
+│   │   ├── navbar/          # Menu de navegação responsivo
+│   │   ├── footer/          # Rodapé da aplicação
+│   │   ├── product-list/    # Lista paginada de produtos
+│   │   └── product-detail/  # Detalhes do produto individual
+│   ├── services/            # Serviços de comunicação
+│   │   └── product.ts       # Service para API de produtos
+│   ├── models/              # Interfaces TypeScript
+│   │   └── product.ts       # Modelos de dados
+│   ├── interceptors/        # Interceptors HTTP
+│   │   └── api-base-url.interceptor.ts # Configura URL base da API
+│   ├── app.config.ts        # Configuração da aplicação
+│   ├── app.routes.ts        # Definição de rotas
+│   └── app.ts               # Componente raiz
+├── environments/            # Configurações por ambiente
+│   ├── environment.ts       # Desenvolvimento
+│   └── environment.prod.ts  # Produção
+└── nginx.conf               # Configuração Nginx para Docker
+```
+
+## 🚀 Funcionalidades
 
 ### ✅ Componentes Implementados
 
 - **NavbarComponent**: Menu de navegação fixo no topo
 - **FooterComponent**: Rodapé com informações da aplicação
-- **ProductListComponent**: Lista de produtos em grid responsivo
-- **ProductDetailComponent**: Página de detalhes do produto
-- **SearchBarComponent**: Barra de pesquisa com debounce
+- **ProductListComponent**: Lista responsiva com paginação, busca e ordenação
+- **ProductDetailComponent**: Página detalhada do produto com compartilhamento
 
-### ✅ Funcionalidades da API
+### ✅ Features da API
 
-- **Listagem de produtos** com paginação e ordenação
-- **Busca por termo** com resultados em tempo real
+- **Listagem paginada** com controles de página
+- **Busca em tempo real** com debounce
+- **Ordenação** por nome, preço e estoque
 - **Detalhes do produto** por ID
-- **Tratamento de erros** com mensagens amigáveis
-- **Estados de loading** para melhor UX
+- **Estados de loading** e tratamento de erros
 
 ### ✅ Recursos de UX/UI
 
 - **Design responsivo** para mobile, tablet e desktop
-- **Animações suaves** e transições
-- **Estados de loading** com spinners
-- **Mensagens de erro** amigáveis
-- **Paginação** intuitiva
-- **Busca em tempo real** com debounce
-- **Compartilhamento** de produtos via Web Share API
+- **Paginação intuitiva** com navegação
+- **Estados visuais** de loading e erro
+- **Animações suaves** e transições CSS
 
-## 🛠️ Tecnologias Utilizadas
+## 🛠️ Tecnologias
 
-- **Angular 20.3.1** - Framework principal
-- **TypeScript** - Linguagem de programação
-- **SCSS** - Pré-processador CSS
-- **RxJS** - Programação reativa
-- **Angular Router** - Roteamento
-- **Angular HttpClient** - Comunicação HTTP
+### Core
+- **Angular 20.3.0** - Framework principal
+- **TypeScript 5.9.2** - Linguagem tipada
+- **RxJS 7.8.0** - Programação reativa
+- **SCSS** - Estilização avançada
 
-## 📁 Estrutura do Projeto
+### Arquitetura
+- **Standalone Components** - Componentes independentes
+- **HTTP Interceptors** - Interceptação de requisições
+- **Environment Variables** - Configuração por ambiente
+- **Services & DI** - Injeção de dependências
 
-```
-src/
-├── app/
-│   ├── components/
-│   │   ├── navbar/           # Componente de navegação
-│   │   ├── footer/           # Componente de rodapé
-│   │   ├── product-list/     # Lista de produtos
-│   │   ├── product-detail/   # Detalhes do produto
-│   │   └── search-bar/       # Barra de pesquisa
-│   ├── services/
-│   │   └── product.ts        # Serviço para API de produtos
-│   ├── models/
-│   │   └── product.ts        # Interfaces TypeScript
-│   ├── app.routes.ts         # Configuração de rotas
-│   ├── app.config.ts         # Configuração da aplicação
-│   ├── app.ts                # Componente principal
-│   ├── app.html              # Template principal
-│   └── app.scss              # Estilos globais
-├── styles.scss               # Estilos globais
-└── main.ts                   # Ponto de entrada
+## ⚙️ Configuração de Ambiente
+
+### Variáveis de Ambiente
+
+**Desenvolvimento** (`src/environments/environment.ts`):
+```typescript
+export const environment = {
+  production: false,
+  apiUrl: 'http://localhost:3000'
+};
 ```
 
-## 🚀 Como Executar
-
-### Pré-requisitos
-
-- Node.js 18+ 
-- pnpm (gerenciador de pacotes)
-- Backend NestJS rodando na porta 3000
-
-### Instalação
-
-```bash
-# Instalar dependências
-pnpm install
-
-# Executar em modo desenvolvimento
-pnpm start
-# ou
-ng serve
-
-# Acessar no navegador
-http://localhost:4200
+**Produção** (`src/environments/environment.prod.ts`):
+```typescript
+export const environment = {
+  production: true,
+  apiUrl: '/back-end'  // Proxy reverso via Nginx
+};
 ```
 
-### Build para Produção
+### Interceptor de API
 
-```bash
-# Gerar build de produção
-pnpm build
-# ou
-ng build
+O `ApiBaseUrlInterceptor` automaticamente adiciona a URL base configurada em `environment.apiUrl` às requisições que começam com `/`:
 
-# Os arquivos serão gerados em dist/
+```typescript
+// Service faz requisição para '/products'
+// Interceptor converte para 'http://localhost:3000/products'
 ```
 
-## 🔗 Integração com API
+## 🗄️ Integração com Backend
 
-A aplicação consome os seguintes endpoints da API:
+### Endpoints Consumidos
 
-### Endpoints Utilizados
-
-- `GET /products` - Lista produtos com paginação
+- `GET /products` - Lista produtos (paginação, ordenação)
 - `GET /products/search?term=xxx` - Busca produtos
 - `GET /products/:id` - Detalhes do produto
 
@@ -123,98 +112,80 @@ A aplicação consome os seguintes endpoints da API:
 - **Ordenação**: `sortField`, `sortDirection`
 - **Busca**: `term`
 
-### Exemplo de Uso
+### Modelos de Dados
 
 ```typescript
-// Listar produtos com paginação
-GET /products?page=1&limit=12&sortField=name&sortDirection=asc
+interface Product {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  stockQuantity: number;
+  imageUrl?: string;
+}
 
-// Buscar produtos
-GET /products/search?term=notebook
-
-// Detalhes do produto
-GET /products/123e4567-e89b-12d3-a456-426614174000
-```
-
-## 🎨 Design System
-
-### Cores Principais
-
-- **Primary**: `#667eea` (Azul)
-- **Secondary**: `#764ba2` (Roxo)
-- **Success**: `#28a745` (Verde)
-- **Warning**: `#ffc107` (Amarelo)
-- **Danger**: `#dc3545` (Vermelho)
-
-### Tipografia
-
-- **Fonte**: Segoe UI, Tahoma, Geneva, Verdana, sans-serif
-- **Tamanhos**: 13px (mobile) → 16px (desktop)
-
-### Breakpoints
-
-- **Mobile**: < 576px
-- **Tablet**: 576px - 768px
-- **Desktop**: > 768px
-
-## 📱 Responsividade
-
-A aplicação é totalmente responsiva com:
-
-- **Grid adaptativo** para produtos
-- **Menu colapsável** em mobile
-- **Tipografia escalável**
-- **Botões touch-friendly**
-- **Imagens responsivas**
-
-## 🔧 Configuração
-
-### Variáveis de Ambiente
-
-Para configurar a URL da API, edite o arquivo `src/app/services/product.ts`:
-
-```typescript
-private readonly apiUrl = 'http://localhost:3000/products';
-```
-
-### Personalização de Estilos
-
-Os estilos podem ser personalizados através das variáveis CSS em `src/styles.scss`:
-
-```scss
-:root {
-  --primary-color: #667eea;
-  --secondary-color: #764ba2;
-  // ... outras variáveis
+interface PaginatedProductsResponse {
+  data: Product[];
+  total: number;
+  page: number;
+  limit: number;
 }
 ```
 
-## 🧪 Testes
+## ⚠️ Limitações Conhecidas
+
+### MongoDB Compatibility
+O frontend atualmente **não implementa DIP** para diferentes bancos de dados. Quando o backend usa MongoDB:
+
+- ✅ **Produtos aparecem na tela** (dados funcionam)
+- ⚠️ **Alguns atributos podem não ser reconhecidos** (interface fixa)
+- ✅ **MySQL funciona perfeitamente** (interface compatível)
+
+**Futuro**: Implementação de componentes concretos para adaptar diferentes schemas de banco.
+
+### Desenvolvimento
 
 ```bash
-# Executar testes unitários
-pnpm test
-# ou
-ng test
-
-# Executar testes e2e
-pnpm e2e
-# ou
-ng e2e
+ng serve
 ```
 
-## 📦 Scripts Disponíveis
+## 🐳 Docker & Nginx
 
-```bash
-# Desenvolvimento
-pnpm start          # ng serve
-pnpm build          # ng build
-pnpm test           # ng test
-pnpm e2e            # ng e2e
+### Configuração Nginx
 
-# Linting
-pnpm lint           # ng lint
-pnpm format         # ng format
+O arquivo `nginx.conf` configura:
+
+- **Servidor estático** para arquivos Angular
+- **Proxy reverso** para `/back-end/` → `backend:3000`
+- **Compressão gzip** para performance
+- **Headers de segurança** (XSS, CSRF, etc.)
+- **Cache otimizado** para assets estáticos
+
+### Proxy Configuration
+
+```nginx
+location /back-end/ {
+    proxy_pass http://backend:3000/;
+    # Headers e configurações de proxy
+}
+```
+
+## 🔄 Integração com Backend DIP
+
+Para suportar completamente o DIP do backend:
+
+```typescript
+// Futuro: Factory para criar adaptadores
+interface ProductAdapter {
+  adaptProduct(rawData: any): Product;
+  adaptResponse(rawResponse: any): PaginatedProductsResponse;
+}
+
+// MySQL Adapter (atual)
+class MySQLProductAdapter implements ProductAdapter { }
+
+// MongoDB Adapter (futuro)
+class MongoProductAdapter implements ProductAdapter { }
 ```
 
 ## 🚀 Deploy
@@ -222,41 +193,14 @@ pnpm format         # ng format
 ### Build de Produção
 
 ```bash
-# Gerar build otimizado
-ng build --configuration production
+# Build otimizado
+ng build --configuration=production
 
-# Os arquivos estarão em dist/catalogo-produtos-frontend/
+# Arquivos gerados em: dist/catalogo-produtos-frontend/
 ```
 
-### Servidor Web
-
-Os arquivos podem ser servidos por qualquer servidor web estático:
-
-- **Nginx**
-- **Apache**
-- **Vercel**
-- **Netlify**
+### Opções de Deploy
+- **Docker** com Nginx (configurado)
+- **Vercel** / **Netlify** (estático)
+- **AWS S3** + CloudFront
 - **GitHub Pages**
-
-## 🤝 Contribuição
-
-1. Fork o projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
-3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
-4. Push para a branch (`git push origin feature/AmazingFeature`)
-5. Abra um Pull Request
-
-## 📄 Licença
-
-Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
-
-## 📞 Suporte
-
-Para suporte, entre em contato através de:
-
-- **Email**: suporte@catalogoprodutos.com
-- **Issues**: [GitHub Issues](https://github.com/seu-usuario/catalogo-produtos/issues)
-
----
-
-**Desenvolvido com ❤️ usando Angular e NestJS**

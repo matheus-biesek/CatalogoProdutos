@@ -7,10 +7,6 @@ export class ProductService {
     @Inject('PRODUCT_REPOSITORY') private readonly productRepository: IProductRepository,
   ) {}
 
-  /**
-   * Retorna uma lista de todos os produtos com paginação e ordenação
-   * GET /api/products?page=1&limit=10&sort=price,asc
-   */
   async findAll(page?: number, limit?: number, sortField?: string, sortDirection?: 'asc' | 'desc') {
     const options: FindAllOptions = {};
     
@@ -33,10 +29,6 @@ export class ProductService {
     return await this.productRepository.findAll(options);
   }
 
-  /**
-   * Filtra a lista de produtos por nome que contenha o termo de busca (case-insensitive)
-   * GET /api/products/search?term={term}
-   */
   async search(term: string) {
     if (!term || term.trim().length < 2) {
       throw new BadRequestException('Termo de busca deve ter pelo menos 2 caracteres');
@@ -45,10 +37,6 @@ export class ProductService {
     return await this.productRepository.search(term.trim());
   }
 
-  /**
-   * Retorna os detalhes de um produto específico pelo seu id
-   * GET /api/products/:id
-   */
   async findById(id: string) {
     return await this.productRepository.findById(id);
   }

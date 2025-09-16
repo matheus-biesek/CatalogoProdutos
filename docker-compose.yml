@@ -9,7 +9,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      # Database configuration
+      # Database
       DB_TYPE: mysql
 
       # MySQL
@@ -29,7 +29,6 @@ services:
       PORT: 3000
       NODE_ENV: production
 
-      # CORS configuration
       CORS_ORIGINS: http://localhost
     depends_on:
       - db
@@ -37,7 +36,6 @@ services:
     networks:
       - app_network
 
-  # MySQL Database
   db:
     image: mysql:8.0
     container_name: mysql_db
@@ -55,7 +53,6 @@ services:
     networks:
       - app_network
 
-  # MongoDB
   mongodb:
     image: mongo:7.0
     container_name: mongodb
@@ -72,7 +69,6 @@ services:
     networks:
       - app_network
 
-  # PHPMyAdmin for MySQL
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     container_name: phpmyadmin
@@ -88,7 +84,6 @@ services:
     networks:
       - app_network
 
-  # Mongo Express for MongoDB
   mongo-express:
     image: mongo-express:1.0.2
     container_name: mongo-express
@@ -106,7 +101,6 @@ services:
     networks:
       - app_network
 
-  # Frontend Angular
   frontend:
     build:
       context: ./front-end

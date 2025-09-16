@@ -1,98 +1,205 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# 🛒 Catálogo de Produtos - Backend
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+API RESTful para gerenciamento de catálogo de produtos com suporte a múltiplos bancos de dados, desenvolvida com NestJS e TypeScript.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 🏗️ Arquitetura
 
-## Description
+Este projeto implementa uma arquitetura limpa com **Dependency Inversion Principle (DIP)**, permitindo alternar entre diferentes bancos de dados através de variáveis de ambiente.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+### 📁 Estrutura do Projeto
 
-## Project setup
-
-```bash
-$ pnpm install
+```
+src/
+├── main.ts                    # Bootstrap da aplicação + configuração Swagger
+├── app.module.ts              # Módulo principal com configuração dinâmica de DB
+└── product/                   # Módulo de produtos
+    ├── product.controller.ts  # Endpoints da API
+    ├── product.service.ts     # Lógica de negócio
+    ├── product.module.ts      # Configuração de injeção dinâmica
+    ├── dto/                   # Data Transfer Objects
+    │   ├── pagination.dto.ts
+    │   ├── sort.dto.ts
+    │   ├── search.dto.ts
+    │   ├── find-all.dto.ts
+    │   ├── error-response.dto.ts
+    │   └── product-response.dto.ts
+    └── dao/                   # Data Access Object Layer
+        ├── interface/
+        │   └── product.repository.ts    # Interface do repositório
+        ├── entity/
+        │   ├── mysql-product.entity.ts  # Entidade TypeORM
+        │   └── mongo-product.entity.ts  # Schema Mongoose
+        └── repository/
+            ├── mysql-product.repository.ts  # Implementação MySQL
+            └── mongo-product.repository.ts  # Implementação MongoDB
 ```
 
-## Compile and run the project
+## 🚀 API Endpoints
 
-```bash
-# development
-$ pnpm run start
+A API oferece 3 endpoints principais documentados automaticamente via Swagger:
 
-# watch mode
-$ pnpm run start:dev
+### 📋 Listar Produtos
+```http
+GET /api/products
+```
+- **Paginação**: `?page=1&limit=10`
+- **Ordenação**: `?sort=price,asc` ou `?sort=name,desc`
+- **Busca**: `?search=notebook` (case-insensitive no nome)
 
-# production mode
-$ pnpm run start:prod
+### 🔍 Buscar Produto por ID
+```http
+GET /api/products/:id
 ```
 
-## Run tests
+## 🗄️ Suporte Multi-Database
 
-```bash
-# unit tests
-$ pnpm run test
+O projeto suporta dois bancos de dados através da variável `DB_TYPE`:
 
-# e2e tests
-$ pnpm run test:e2e
+### MySQL (TypeORM)
+- Entidade: `MySqlProduct`
+- Repositório: `MySqlProductRepository`
+- ORM: TypeORM com MySQL2
 
-# test coverage
-$ pnpm run test:cov
+### MongoDB (Mongoose)
+- Schema: `MongoProduct`
+- Repositório: `MongoProductRepository`
+- ODM: Mongoose
+
+## ⚙️ Configuração
+
+### Variáveis de Ambiente
+
+Crie um arquivo `.env` com as seguintes configurações:
+
+```env
+# Tipo de banco de dados (mysql ou mongo)
+DB_TYPE=mysql
+
+# Configurações MySQL
+DB_HOST=localhost
+DB_PORT=3306
+DB_USERNAME=root
+DB_PASSWORD=password
+DB_NAME=loja
+
+# Configurações MongoDB
+MONGO_HOST=localhost
+MONGO_PORT=27017
+MONGO_USERNAME=admin
+MONGO_PASSWORD=adminpass
+MONGO_DB=loja
+
+# Servidor
+PORT=3000
+NODE_ENV=development
+
+# CORS (múltiplas origens separadas por vírgula)
+CORS_ORIGINS=http://localhost:4200,http://127.0.0.1:4200
 ```
 
-## Deployment
+## 🛠️ Principais Dependências
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+### Framework & Core
+- **NestJS**: Framework Node.js progressivo e escalável
+- **TypeScript**: Superset tipado do JavaScript
+- **Reflect Metadata**: Decorators e metadados para DI
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+### Banco de Dados
+- **TypeORM**: ORM para TypeScript e JavaScript (MySQL)
+- **Mongoose**: ODM para MongoDB e Node.js
+- **MySQL2**: Driver MySQL mais rápido
+- **@nestjs/typeorm**: Integração TypeORM com NestJS
+- **@nestjs/mongoose**: Integração Mongoose com NestJS
 
+### Validação & Transformação
+- **Class Validator**: Validação declarativa baseada em decorators
+- **Class Transformer**: Transformação de objetos plain para classes
+
+### Documentação
+- **Swagger UI Express**: Interface web para documentação da API
+- **@nestjs/swagger**: Integração automática Swagger com NestJS
+
+### Configuração
+- **@nestjs/config**: Gerenciamento de configurações e variáveis de ambiente
+- **Dotenv**: Carregamento de variáveis de ambiente
+
+### Desenvolvimento
+- **Jest**: Framework de testes
+- **ESLint + Prettier**: Linting e formatação de código
+- **Supertest**: Testes de integração HTTP
+
+## 🏃 Como Executar
+
+### Pré-requisitos
+- Node.js 18+
+- PNPM
+- MySQL ou MongoDB (conforme configuração)
+
+### Instalação
 ```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
+# Instalar dependências
+pnpm install
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+# Configurar variáveis de ambiente
 
-## Resources
+```bash
+# Tipo de banco de dados (mysql ou mongo)
+DB_TYPE=mysql
 
-Check out a few resources that may come in handy when working with NestJS:
+# Configurações MySQL
+DB_HOST=localhost
+DB_PORT=3306
+DB_USERNAME=root
+DB_PASSWORD=password
+DB_NAME=loja
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+# Configurações MongoDB
+MONGO_HOST=localhost
+MONGO_PORT=27017
+MONGO_USERNAME=admin
+MONGO_PASSWORD=adminpass
+MONGO_DB=loja
+```
 
-## Support
+# Iniciar aplicação.
+```bash
+# Modo desenvolvimento (hot reload)
+pnpm run start:dev
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+# Modo produção
+pnpm run start:prod
 
-## Stay in touch
+# Build
+pnpm run build
+```
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## 📚 Documentação da API
 
-## License
+Após iniciar o servidor, acesse a documentação interativa:
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+```
+http://localhost:3000/api
+```
+
+A documentação Swagger é gerada automaticamente com base nos decorators dos DTOs e controladores.
+
+## 🐳 Docker
+
+O projeto inclui suporte completo ao Docker:
+
+```bash
+# Build da imagem
+docker build -t catalogo-backend .
+
+# Executar com docker-compose (inclui MySQL/MongoDB)
+docker-compose up -d
+```
+
+## 🎯 Padrões Implementados
+
+- **Dependency Inversion Principle (DIP)**: Inversão de dependências para alternância de repositórios
+- **Repository Pattern**: Abstração da camada de dados
+- **DTO Pattern**: Validação e transformação de dados
+- **Module Pattern**: Organização modular do código
+- **Decorator Pattern**: Validação, documentação e metadados

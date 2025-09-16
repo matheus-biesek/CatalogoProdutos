@@ -18,7 +18,7 @@ export class ProductModule {
     return {
       module: ProductModule,
       imports: [
-        // Configuração condicional baseada na variável DB_TYPE
+        // Registra entidades/schemas de acordo com o banco escolhido
         ...(process.env.DB_TYPE === 'mongo' 
           ? [MongooseModule.forFeature([{ name: MongoProduct.name, schema: ProductSchema }])]
           : [TypeOrmModule.forFeature([MySqlProduct])]
@@ -27,7 +27,7 @@ export class ProductModule {
       controllers: [ProductController],
       providers: [
         ProductService,
-        // Configuração condicional dos repositórios
+        // Define qual repositório injetar com base no banco configurado
         ...(process.env.DB_TYPE === 'mongo'
           ? [
               MongoProductRepository,
@@ -39,6 +39,7 @@ export class ProductModule {
             ]
         ),
       ],
+      // Exporta o service e o repositório para uso em outros módulos
       exports: [PRODUCT_REPOSITORY, ProductService],
     };
   }

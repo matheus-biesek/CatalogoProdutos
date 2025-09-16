@@ -1,10 +1,5 @@
-// Script de inicialização para MongoDB
-// Este script será executado automaticamente quando o container MongoDB for criado
-
-// Selecionar o database 'loja'
 db = db.getSiblingDB('loja');
 
-// Criar a coleção 'produtos' e inserir dados iniciais
 db.produtos.insertMany([
     {
         _id: ObjectId(),
@@ -48,7 +43,6 @@ db.produtos.insertMany([
     }
 ]);
 
-// Criar índices para melhor performance
 db.produtos.createIndex({ "nome": 1 });
 db.produtos.createIndex({ "preco": 1 });
 db.produtos.createIndex({ "quantidade_em_stock": 1 });
