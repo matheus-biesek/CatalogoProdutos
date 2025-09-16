@@ -1,0 +1,73 @@
+<div class="product-detail-container">
+  <!-- Cabeçalho -->
+  <div class="header">
+    <button (click)="goBackToList()" class="back-btn">← Voltar para Lista</button>
+    <h1>Detalhes do Produto</h1>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading" *ngIf="isLoading">
+    <p>Carregando produto...</p>
+  </div>
+
+  <!-- Erro -->
+  <div class="error" *ngIf="error && !isLoading">
+    <p>{{ error }}</p>
+  </div>
+
+  <!-- Detalhes do Produto -->
+  <div class="product-detail" *ngIf="product && !isLoading">
+    <div class="product-content">
+      <div class="product-image">
+        <img
+          *ngIf="product.imageUrl"
+          [src]="product.imageUrl"
+          [alt]="product.name"
+          class="product-img"
+          (error)="$event.target.style.display='none'"
+        />
+        <div
+          *ngIf="!product.imageUrl"
+          class="image-placeholder">
+          📦
+        </div>
+      </div>
+
+      <div class="product-info">
+        <h2 class="product-name">{{ product.name }}</h2>
+
+        <div class="info-grid">
+          <div class="info-item">
+            <label>ID:</label>
+            <span>{{ product.id }}</span>
+          </div>
+
+          <div class="info-item">
+            <label>Preço:</label>
+            <span class="price">{{ formatPrice(product.price) }}</span>
+          </div>
+
+          <div class="info-item">
+            <label>Descrição:</label>
+            <span>{{ product.description || 'Não informado' }}</span>
+          </div>
+
+          <div class="info-item">
+            <label>Quantidade em Estoque:</label>
+            <span [class.low-stock]="product.stockQuantity < 10">
+              {{ product.stockQuantity }} unidades
+            </span>
+          </div>
+
+          <div class="info-item" *ngIf="product.imageUrl">
+            <label>URL da Imagem:</label>
+            <a [href]="product.imageUrl" target="_blank" class="image-link">
+              Ver imagem original
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
