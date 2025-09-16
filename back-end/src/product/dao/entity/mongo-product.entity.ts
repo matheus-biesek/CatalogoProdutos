@@ -18,8 +18,8 @@ export class MongoProduct {
   @Prop({ type: String, alias: 'url_imagem' })
   imageUrl?: string; // Campo opcional
 
-  @Prop({ type: Number, default: 0, alias: 'quantidade_em_stock' })
-  stockQuantity: number;
+  @Prop({ type: Number, default: 0 })
+  quantidade_em_stock: number;
 }
 
 export const ProductSchema = SchemaFactory.createForClass(MongoProduct);
