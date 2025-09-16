@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { MongoProduct, ProductDocument } from '../entity/mongo-product.entity';
 import { IProductRepository, FindAllOptions, PaginationOptions, SortOptions } from '../interface/product.repository';
 
@@ -23,7 +23,7 @@ export class MongoProductRepository implements IProductRepository {
       const sortObj: any = {};
       if (sort) {
         // Validar se o campo de ordenação é válido
-        const validSortFields = ['name', 'price', 'description', 'stockQuantity', 'imageUrl'];
+        const validSortFields = ['name', 'price', 'description', 'quantidade_em_stock', 'imageUrl'];
         if (validSortFields.includes(sort.field)) {
           sortObj[sort.field] = sort.direction === 'asc' ? 1 : -1;
         }
@@ -53,6 +53,11 @@ export class MongoProductRepository implements IProductRepository {
 
   async findById(id: string) {
     try {
+      // Validar se o ID é um ObjectId válido
+      if (!Types.ObjectId.isValid(id)) {
+        throw new NotFoundException(`Produto com ID ${id} não encontrado`);
+      }
+
       const product = await this.productModel.findById(id).exec();
       if (!product) {
         throw new NotFoundException(`Produto com ID ${id} não encontrado`);
@@ -68,7 +73,7 @@ export class MongoProductRepository implements IProductRepository {
 
   async search(term: string) {
     try {
-      const products = await this.productModel.find({ name: { $regex: term, $options: 'i' } }).exec();
+      const products = await this.productModel.find({ nome: { $regex: term, $options: 'i' } }).exec();
       if (!products || products.length === 0) {
         throw new NotFoundException(`Nenhum produto encontrado com o termo "${term}"`);
       }

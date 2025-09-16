@@ -1,9 +1,8 @@
-import { 
-  Controller, 
-  Get, 
-  Param, 
-  Query, 
-  ParseUUIDPipe, 
+import {
+  Controller,
+  Get,
+  Param,
+  Query,
   ValidationPipe,
   UsePipes,
   HttpStatus,
@@ -133,11 +132,14 @@ export class ProductController {
     summary: 'Buscar produto por ID',
     description: 'Retorna um produto específico pelo seu ID único'
   })
-  @ApiParam({ 
-    name: 'id', 
-    description: 'ID único do produto',
-    example: '123e4567-e89b-12d3-a456-426614174000',
-    format: 'uuid'
+  @ApiParam({
+    name: 'id',
+    description: 'ID único do produto (ObjectId do MongoDB)',
+    example: '64f1a2b3c4d5e6f7g8h9i0j1',
+    schema: {
+      type: 'string',
+      pattern: '^[0-9a-fA-F]{24}$'
+    }
   })
   @ApiResponse({ 
     status: 200, 
@@ -156,7 +158,7 @@ export class ProductController {
     description: 'Erro interno do servidor',
     type: InternalServerErrorResponseDto
   })
-  async findById(@Param('id', ParseUUIDPipe) id: string) {
+  async findById(@Param('id') id: string) {
     return await this.productService.findById(id);
   }
 }
