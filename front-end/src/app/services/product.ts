@@ -7,7 +7,7 @@ import { Product, PaginatedProductsResponse } from '../models/product';
   providedIn: 'root'
 })
 export class ProductService {
-  private readonly apiUrl = 'http://localhost:3000/products';
+  private readonly apiUrl = '/products';
 
   constructor(private http: HttpClient) {}
 
