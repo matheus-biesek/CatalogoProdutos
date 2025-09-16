@@ -1,0 +1,164 @@
+<div class="product-list-container">
+  <!-- Cabeçalho -->
+  <div class="header">
+    <h1>Catálogo de Produtos</h1>
+  </div>
+
+  <!-- Seção de Busca -->
+  <div class="search-section">
+    <!-- Busca por termo -->
+    <div class="search-group">
+      <label>Buscar por nome:</label>
+      <div class="search-controls">
+        <input
+          type="text"
+          [(ngModel)]="searchTerm"
+          (input)="onSearchChange()"
+          placeholder="Digite o nome do produto..."
+          class="search-input"
+        />
+        <button
+          *ngIf="searchTerm"
+          (click)="searchTerm = ''; loadProducts()"
+          class="clear-btn">
+          ✕
+        </button>
+      </div>
+    </div>
+
+    <!-- Busca por ID -->
+    <div class="search-group">
+      <label>Buscar por ID:</label>
+      <div class="search-controls">
+        <input
+          type="text"
+          [(ngModel)]="searchById"
+          placeholder="Digite o ID do produto..."
+          class="search-input"
+          (keyup.enter)="searchProductById()"
+        />
+        <button
+          (click)="searchProductById()"
+          [disabled]="isSearchingById || !searchById.trim()"
+          class="search-btn">
+          {{ isSearchingById ? 'Buscando...' : 'Buscar' }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Botão para limpar todas as buscas -->
+    <button
+      *ngIf="searchTerm || searchById"
+      (click)="clearSearch()"
+      class="clear-all-btn">
+      Limpar Filtros
+    </button>
+  </div>
+
+  <!-- Controles de Paginação e Ordenação -->
+  <div class="controls-section" *ngIf="!searchTerm && !searchById">
+    <div class="controls-row">
+      <!-- Ordenação -->
+      <div class="sort-controls">
+        <label>Ordenar por:</label>
+        <select [(ngModel)]="sortField" (change)="changeSortField()" class="select-input">
+          <option *ngFor="let option of sortOptions" [value]="option.value">
+            {{ option.label }}
+          </option>
+        </select>
+        <button (click)="changeSortDirection()" class="sort-direction-btn">
+          {{ sortDirection === 'asc' ? '↑' : '↓' }}
+        </button>
+      </div>
+
+      <!-- Items por página -->
+      <div class="items-per-page">
+        <label>Itens por página:</label>
+        <select [(ngModel)]="itemsPerPage" (change)="changeItemsPerPage()" class="select-input">
+          <option *ngFor="let option of itemsPerPageOptions" [value]="option">
+            {{ option }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Informações de paginação -->
+    <div class="pagination-info" *ngIf="totalItems > 0">
+      <span>
+        Mostrando {{ (currentPage - 1) * itemsPerPage + 1 }} a
+        {{ Math.min(currentPage * itemsPerPage, totalItems) }} de
+        {{ totalItems }} produtos
+      </span>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading" *ngIf="isLoading || isSearching || isSearchingById">
+    <p>
+      {{ isLoading ? 'Carregando produtos...' :
+         isSearching ? 'Pesquisando por nome...' :
+         'Pesquisando por ID...' }}
+    </p>
+  </div>
+
+  <!-- Grid de Produtos -->
+  <div class="products-grid" *ngIf="!isLoading && !isSearching && !isSearchingById && products.length > 0">
+    <div
+      class="product-card"
+      *ngFor="let product of products"
+      (click)="viewProduct(product)">
+
+      <div class="product-image">
+        <img
+          *ngIf="product.imageUrl"
+          [src]="product.imageUrl"
+          [alt]="product.name"
+          class="product-img"
+          (error)="$event.target.style.display='none'"
+        />
+        <span
+          *ngIf="!product.imageUrl"
+          class="image-placeholder">
+          📦
+        </span>
+      </div>
+
+      <div class="product-info">
+        <h3 class="product-name">{{ product.name }}</h3>
+        <p class="product-price">{{ formatPrice(product.price) }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mensagem quando não há produtos -->
+  <div class="no-products" *ngIf="!isLoading && !isSearching && !isSearchingById && products.length === 0">
+    <p>Nenhum produto encontrado.</p>
+  </div>
+
+  <!-- Paginação -->
+  <div class="pagination" *ngIf="!isLoading && !isSearching && !isSearchingById && !searchTerm && !searchById && totalPages > 1">
+    <button
+      (click)="previousPage()"
+      [disabled]="currentPage === 1"
+      class="pagination-btn">
+      « Anterior
+    </button>
+
+    <div class="page-numbers">
+      <button
+        *ngFor="let i of getPageNumbers()"
+        (click)="goToPage(i)"
+        [class.active]="currentPage === i"
+        class="page-btn">
+        {{ i }}
+      </button>
+    </div>
+
+    <button
+      (click)="nextPage()"
+      [disabled]="currentPage === totalPages"
+      class="pagination-btn">
+      Próxima »
+    </button>
+  </div>
+</div>
