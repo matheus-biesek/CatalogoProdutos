@@ -23,10 +23,18 @@ export class MongoProductRepository implements IProductRepository {
       // Configurar ordenação
       const sortObj: any = {};
       if (sort) {
-        // Validar se o campo de ordenação é válido
-        const validSortFields = ['name', 'price', 'description', 'quantidade_em_stock', 'imageUrl'];
-        if (validSortFields.includes(sort.field)) {
-          sortObj[sort.field] = sort.direction === 'asc' ? 1 : -1;
+        // Mapear campos do frontend para campos do MongoDB
+        const fieldMap: { [key: string]: string } = {
+          'name': 'nome',
+          'price': 'preco',
+          'description': 'descricao',
+          'stockQuantity': 'quantidade_em_stock',
+          'imageUrl': 'url_imagem'
+        };
+
+        const mongoField = fieldMap[sort.field];
+        if (mongoField) {
+          sortObj[mongoField] = sort.direction === 'asc' ? 1 : -1;
         }
       }
       
