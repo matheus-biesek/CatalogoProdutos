@@ -32,11 +32,7 @@ export class AppModule {
                 imports: [ConfigModule],
                 useFactory: (configService: ConfigService) => ({
                   type: 'mysql',
-                  host: configService.get('DB_HOST', 'localhost'),
-                  port: parseInt(configService.get('DB_PORT', '3306')),
-                  username: configService.get('DB_USERNAME', 'root'),
-                  password: configService.get('DB_PASSWORD', ''),
-                  database: configService.get('DB_NAME', 'loja'),
+                  url: `mysql://${configService.get('DB_USERNAME', 'root')}:${configService.get('DB_PASSWORD', '')}@${configService.get('DB_HOST', 'localhost')}:${configService.get('DB_PORT', '3306')}/${configService.get('DB_NAME', 'loja')}?charset=utf8mb4`,
                   entities: [MySqlProduct],
                   synchronize: false,
                 }),
