@@ -4,13 +4,13 @@ Este diretório contém os arquivos para executar a aplicação no Kubernetes.
 
 ## Arquivos
 
-- **`catalogo-app.yaml`** - Manifests do Kubernetes (funciona em qualquer Kubernetes)
+- **`catalogo-app.yaml`** - Manifests do Kubernetes
 - **`deploy.sh`** - Script automatizado para build e deploy (**Linux apenas**)
 
 ## Compatibilidade
 
 ### Linux
-- k3s, minikube, ou qualquer Kubernetes
+- k3s
 - Script `deploy.sh` funciona normalmente
 
 ### Windows
@@ -29,7 +29,7 @@ Este diretório contém os arquivos para executar a aplicação no Kubernetes.
 - Docker Desktop com Kubernetes habilitado OU WSL2 + k3s
 - kubectl configurado
 
-## Deploy Rápido
+## Deploy Rápido - Linux
 
 ```bash
 ./deploy.sh
@@ -79,4 +79,3 @@ kubectl delete namespace catalogo-produtos
 - 3 Services: mysql-service, backend-service, frontend-service
 - Secret para senhas do banco
 - ConfigMap para configurações
-- PersistentVolumeClaim para dados do MySQL
