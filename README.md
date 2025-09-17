@@ -121,8 +121,8 @@ Para desenvolvimento sem Docker, consulte os READMEs específicos:
 - ✅ **Multi-banco**: Suporte transparente para MySQL e MongoDB
 - ✅ **Docker**: Ambiente completo containerizado
 
-## 🚀 Próximos Passos
-- **Kubernetes**: Migração da orquestração Docker para Kubernetes
+## 🚀 Funcionalidades Adicionais
+- **Kubernetes**: ✅ Orquestração Kubernetes disponível na branch `kubernetes`
 
 ---
 
