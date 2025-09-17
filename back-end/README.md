@@ -141,7 +141,7 @@ CORS_ORIGINS=http://localhost:4200,http://127.0.0.1:4200
 pnpm install
 ```
 
-# Configurar variáveis de ambiente
+# Configurar variáveis de ambiente `.env`
 
 ```bash
 # Tipo de banco de dados (mysql ou mongo)
@@ -179,7 +179,7 @@ pnpm run build
 Após iniciar o servidor, acesse a documentação interativa:
 
 ```
-http://localhost:3000/api
+http://localhost:3000/api/docs
 ```
 
 A documentação Swagger é gerada automaticamente com base nos decorators dos DTOs e controladores.

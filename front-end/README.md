@@ -38,7 +38,7 @@ src/
 - **NavbarComponent**: Menu de navegação fixo no topo
 - **FooterComponent**: Rodapé com informações da aplicação
 - **ProductListComponent**: Lista responsiva com paginação, busca e ordenação
-- **ProductDetailComponent**: Página detalhada do produto com compartilhamento
+- **ProductDetailComponent**: Página detalhada do produto
 
 ### ✅ Features da API
 
@@ -48,20 +48,13 @@ src/
 - **Detalhes do produto** por ID
 - **Estados de loading** e tratamento de erros
 
-### ✅ Recursos de UX/UI
-
-- **Design responsivo** para mobile, tablet e desktop
-- **Paginação intuitiva** com navegação
-- **Estados visuais** de loading e erro
-- **Animações suaves** e transições CSS
-
 ## 🛠️ Tecnologias
 
 ### Core
 - **Angular 20.3.0** - Framework principal
 - **TypeScript 5.9.2** - Linguagem tipada
 - **RxJS 7.8.0** - Programação reativa
-- **SCSS** - Estilização avançada
+- **SCSS** - Estilização
 
 ### Arquitetura
 - **Standalone Components** - Componentes independentes

@@ -1,15 +1,15 @@
 # 🛒 Catálogo de Produtos
 
-Sistema completo de catálogo de produtos com backend NestJS, frontend Angular e suporte a múltiplos bancos de dados.
+Sistema completo de catálogo de produtos com backend NestJS, frontend Angular e suporte a múltiplos bancos de dados (MySQL e MongoDB).
 
 ## 📁 Estrutura do Projeto
 
 ```
 📁 CatalogoProdutos/
-├── 🚀 back-end/          # API NestJS com DIP
-├── 🎨 front-end/         # SPA Angular
-├── 🗄️ database/          # Scripts de inicialização
-└── 🐳 docker-compose.yml # Orquestração completa
+├── 🚀 back-end/          # API NestJS com DIP (Dependency Inversion Principle)
+├── 🎨 front-end/         # SPA Angular com interface responsiva
+├── 🗄️ database/          # Scripts de inicialização e migração
+└── 🐳 docker-compose.yml # Orquestração completa dos serviços
 ```
 
 > 📖 **Cada pasta possui seu próprio README** com documentação detalhada e instruções específicas.
@@ -17,54 +17,113 @@ Sistema completo de catálogo de produtos com backend NestJS, frontend Angular e
 ## 🔧 Visão Geral Técnica
 
 ### Backend (NestJS)
-- **Arquitetura**: DIP implementado - permite alternar entre MySQL e MongoDB
-- **API**: RESTful com 3 endpoints principais
-- **Documentação**: Swagger automático
+- **Arquitetura**: DIP implementado - permite alternar entre MySQL e MongoDB sem alteração de código
+- **API**: RESTful com endpoints para busca de produtos
+- **Documentação**: Swagger automático disponível em `/api/docs`
+- **Validação**: DTOs com class-validator para entrada de dados
+- **Logging**: Sistema de logs estruturado
 
 ### Frontend (Angular)
-- **Status**: ✅ 100% funcional com MySQL
-- **Interface**: Responsiva com paginação, busca e detalhes
+- **Compatibilidade**: ✅ 100% funcional com MySQL e MongoDB
+- **Interface**: Responsiva com Bootstrap, paginação, busca em tempo real
+- **Funcionalidades**: Listagem, detalhes.
 
 ### Database
-- **MySQL**: Totalmente compatível
-- **MongoDB**: Backend funciona, frontend tem limitações de parsing
-- **Scripts**: Inicialização automática com dados de exemplo
+- **Scripts**: Inicialização automática com dados de exemplo para ambos os bancos
+- **Migração**: Scripts para popular bancos com dados de teste
 
 ## 🚀 Execução Rápida
 
+### Pré-requisitos
+- Docker e Docker Compose instalados
+- Portas 80, 3000, 3306, 27017, 8080, 8081 disponíveis
+
+### Iniciando a aplicação
+
 ```bash
-# Stack completa
+# Clonar o repositório
+git clone https://github.com/matheus-biesek/CatalogoProdutos.git
+cd CatalogoProdutos
+
+# Subir toda a stack
 docker-compose up -d
 
-# Acessar:
-# Frontend: http://localhost
-# API: http://localhost:3000
-# Swagger: http://localhost:3000/api
+# Verificar status dos serviços
+docker-compose ps
 ```
 
-## 🐳 Docker Compose Principal
+### Acessos da aplicação
+- **Frontend**: http://localhost - Interface principal do catálogo
+- **API**: http://localhost:3000 - Endpoints da API REST
+- **Swagger**: http://localhost:3000/api/docs - Documentação interativa da API
+- **phpMyAdmin**: http://localhost:8080 - Interface web para MySQL
+- **Mongo Express**: http://localhost:8081 - Interface web para MongoDB
 
-O `docker-compose.yml` orquestra **todos os serviços**:
+## 🐳 Arquitetura dos Serviços
 
-- **backend**: API NestJS (porta 3000)
-- **frontend**: Angular + Nginx (porta 80)
-- **db**: MySQL 8.0 (porta 3306)
-- **mongodb**: MongoDB 7.0 (porta 27017)
-- **phpmyadmin**: Interface MySQL (porta 8080)
-- **mongo-express**: Interface MongoDB (porta 8081)
+O `docker-compose.yml` orquestra **6 serviços integrados**:
 
-### Configuração de Banco
+| Serviço | Tecnologia | Porta | Descrição |
+|---------|------------|-------|-----------|
+| **backend** | NestJS + TypeScript | 3000 | API REST com DIP para múltiplos bancos |
+| **frontend** | Angular + Nginx | 80 | SPA responsiva com interface moderna |
+| **db** | MySQL 8.0 | 3306 | Banco relacional principal |
+| **mongodb** | MongoDB 7.0 | 27017 | Banco NoSQL alternativo |
+| **phpmyadmin** | phpMyAdmin | 8080 | Interface web para administração MySQL |
+| **mongo-express** | Mongo Express | 8081 | Interface web para administração MongoDB |
 
-Altere a variável `DB_TYPE` no `docker-compose.yml`:
+### ⚙️ Configuração de Banco de Dados
+
+Para alternar entre MySQL e MongoDB, modifique a variável `DB_TYPE` no `docker-compose.yml`:
 
 ```yaml
-environment:
-  DB_TYPE: mysql    # ou 'mongo'
+services:
+  backend:
+    environment:
+      DB_TYPE: mysql    # Opções: 'mysql' ou 'mongo'
 ```
 
-## 🎯 Próximos Passos
+**Reinicie o backend após a alteração:**
+```bash
+docker-compose restart backend
+```
+
+## 🛠️ Comandos Úteis
+
+```bash
+# Logs dos serviços
+docker-compose logs -f backend
+docker-compose logs -f frontend
+
+# Parar todos os serviços
+docker-compose down
+
+# Rebuild completo
+docker-compose down
+docker-compose build --no-cache
+docker-compose up -d
+
+# Limpar volumes (remove dados dos bancos)
+docker-compose down -v
+```
+
+## 🔧 Desenvolvimento Local
+
+Para desenvolvimento sem Docker, consulte os READMEs específicos:
+- `back-end/README.md` - Configuração e execução do backend
+- `front-end/README.md` - Configuração e execução do frontend
+
+## 🎯 Funcionalidades Implementadas
+
+- ✅ **Busca**: Pesquisa em tempo real por filtros
+- ✅ **Paginação**: Navegação eficiente entre grandes datasets
+- ✅ **Documentação**: Swagger automático com todos os endpoints
+- ✅ **Multi-banco**: Suporte transparente para MySQL e MongoDB
+- ✅ **Docker**: Ambiente completo containerizado
+
+## 🚀 Próximos Passos
 - **Kubernetes**: Migração da orquestração Docker para Kubernetes
 
 ---
 
-📚 **Para instruções detalhadas**, consulte o README de cada pasta.
+📚 **Para instruções detalhadas de desenvolvimento**, consulte o README de cada pasta.
