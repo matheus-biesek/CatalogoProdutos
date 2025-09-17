@@ -6,6 +6,7 @@ import { IProductRepository, FindAllOptions, PaginationOptions, SortOptions } fr
 
 @Injectable()
 export class MongoProductRepository implements IProductRepository {
+
   constructor(
     @InjectModel(MongoProduct.name) private productModel: Model<ProductDocument>,
   ) {}
@@ -53,7 +54,6 @@ export class MongoProductRepository implements IProductRepository {
 
   async findById(id: string) {
     try {
-      // Validar se o ID é um ObjectId válido
       if (!Types.ObjectId.isValid(id)) {
         throw new NotFoundException(`Produto com ID ${id} não encontrado`);
       }

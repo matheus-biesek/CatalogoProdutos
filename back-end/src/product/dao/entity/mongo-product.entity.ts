@@ -23,3 +23,24 @@ export class MongoProduct {
 }
 
 export const ProductSchema = SchemaFactory.createForClass(MongoProduct);
+
+ProductSchema.set('toJSON', {
+  transform: function(doc, ret: any) {
+    ret.id = ret._id;
+    ret.name = ret.nome;
+    ret.description = ret.descricao || '';
+    ret.price = ret.preco;
+    ret.stockQuantity = ret.quantidade_em_stock;
+    ret.imageUrl = ret.url_imagem;
+
+    delete ret._id;
+    delete ret.__v;
+    delete ret.nome;
+    delete ret.descricao;
+    delete ret.preco;
+    delete ret.quantidade_em_stock;
+    delete ret.url_imagem;
+
+    return ret;
+  }
+});
