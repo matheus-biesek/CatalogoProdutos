@@ -21,9 +21,10 @@ import {
 import { ProductService } from './product.service';
 import type { FindAllQueryDto } from './dto/find-all.dto';
 import { SearchDto } from './dto/search.dto';
-import { 
-  ProductResponseDto, 
-  PaginatedProductsResponseDto 
+import { ParamIdDto } from './dto/param-id.dto';
+import {
+  ProductResponseDto,
+  PaginatedProductsResponseDto
 } from './dto/product-response.dto';
 import { 
   ErrorResponseDto, 
@@ -134,11 +135,23 @@ export class ProductController {
   })
   @ApiParam({
     name: 'id',
-    description: 'ID único do produto (ObjectId do MongoDB)',
-    example: '64f1a2b3c4d5e6f7g8h9i0j1',
+    description: 'ID único do produto (ObjectId do MongoDB ou UUID do MySQL)',
+    examples: {
+      mongodb: {
+        summary: 'MongoDB ObjectId',
+        value: '64f1a2b3c4d5e6f7g8h9i0j1'
+      },
+      mysql: {
+        summary: 'MySQL UUID',
+        value: '550e8400-e29b-41d4-a716-446655440000'
+      }
+    },
     schema: {
       type: 'string',
-      pattern: '^[0-9a-fA-F]{24}$'
+      oneOf: [
+        { pattern: '^[0-9a-fA-F]{24}$', description: 'MongoDB ObjectId' },
+        { pattern: '^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$', description: 'MySQL UUID' }
+      ]
     }
   })
   @ApiResponse({ 
@@ -158,7 +171,7 @@ export class ProductController {
     description: 'Erro interno do servidor',
     type: InternalServerErrorResponseDto
   })
-  async findById(@Param('id') id: string) {
-    return await this.productService.findById(id);
+  async findById(@Param() params: ParamIdDto) {
+    return await this.productService.findById(params.id);
   }
 }
