@@ -6,7 +6,7 @@ db.produtos.insertMany([
         nome: 'Notebook Dell Inspiron',
         descricao: 'Notebook Dell com 16GB RAM e SSD 512GB',
         preco: 4500.00,
-        url_imagem: 'https://exemplo.com/dell.jpg',
+        url_imagem: 'https://cdn.pixabay.com/photo/2016/11/21/06/53/beautiful-natural-image-1844362_640.jpg',
         quantidade_em_stock: 10
     },
     {
@@ -14,7 +14,7 @@ db.produtos.insertMany([
         nome: 'iPhone 14',
         descricao: 'Smartphone Apple com 128GB',
         preco: 6500.00,
-        url_imagem: 'https://exemplo.com/iphone14.jpg',
+        url_imagem: 'https://thumbs.dreamstime.com/b/superf%C3%ADcie-surfando-da-%C3%A1gua-onda-de-oceano-do-mar-124362369.jpg',
         quantidade_em_stock: 5
     },
     {
@@ -22,7 +22,7 @@ db.produtos.insertMany([
         nome: 'Monitor LG UltraWide',
         descricao: 'Monitor 29 polegadas Full HD',
         preco: 1200.00,
-        url_imagem: 'https://exemplo.com/lg.jpg',
+        url_imagem: 'https://cdn.pixabay.com/photo/2015/01/21/14/14/office-606761_640.jpg',
         quantidade_em_stock: 8
     },
     {
@@ -30,7 +30,7 @@ db.produtos.insertMany([
         nome: 'Teclado Mecânico',
         descricao: 'Teclado RGB Switch Blue',
         preco: 350.00,
-        url_imagem: 'https://exemplo.com/teclado.jpg',
+        url_imagem: 'https://wallpapers.com/images/hd/awesome-pictures-k287z98ruunquo28.jpg',
         quantidade_em_stock: 15
     },
     {
@@ -38,7 +38,7 @@ db.produtos.insertMany([
         nome: 'Mouse Gamer Logitech',
         descricao: 'Mouse com 6 botões programáveis',
         preco: 250.00,
-        url_imagem: 'https://exemplo.com/mouse.jpg',
+        url_imagem: 'https://wallpapers.com/images/featured/imagens-claras-gkaxtdvra1koe62i.jpg',
         quantidade_em_stock: 20
     }
 ]);
