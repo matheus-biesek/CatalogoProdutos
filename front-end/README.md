@@ -132,17 +132,6 @@ interface PaginatedProductsResponse {
 }
 ```
 
-## ⚠️ Limitações Conhecidas
-
-### MongoDB Compatibility
-O frontend atualmente **não implementa DIP** para diferentes bancos de dados. Quando o backend usa MongoDB:
-
-- ✅ **Produtos aparecem na tela** (dados funcionam)
-- ⚠️ **Alguns atributos podem não ser reconhecidos** (interface fixa)
-- ✅ **MySQL funciona perfeitamente** (interface compatível)
-
-**Futuro**: Implementação de componentes concretos para adaptar diferentes schemas de banco.
-
 ### Desenvolvimento
 
 ```bash
@@ -170,36 +159,8 @@ location /back-end/ {
 }
 ```
 
-## 🔄 Integração com Backend DIP
+## 🚀 Opções deploy
 
-Para suportar completamente o DIP do backend:
-
-```typescript
-// Futuro: Factory para criar adaptadores
-interface ProductAdapter {
-  adaptProduct(rawData: any): Product;
-  adaptResponse(rawResponse: any): PaginatedProductsResponse;
-}
-
-// MySQL Adapter (atual)
-class MySQLProductAdapter implements ProductAdapter { }
-
-// MongoDB Adapter (futuro)
-class MongoProductAdapter implements ProductAdapter { }
-```
-
-## 🚀 Deploy
-
-### Build de Produção
-
-```bash
-# Build otimizado
-ng build --configuration=production
-
-# Arquivos gerados em: dist/catalogo-produtos-frontend/
-```
-
-### Opções de Deploy
 - **Docker** com Nginx (configurado)
 - **Vercel** / **Netlify** (estático)
 - **AWS S3** + CloudFront

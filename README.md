@@ -23,7 +23,6 @@ Sistema completo de catálogo de produtos com backend NestJS, frontend Angular e
 
 ### Frontend (Angular)
 - **Status**: ✅ 100% funcional com MySQL
-- **Limitação**: ⚠️ **DIP não implementado** - MongoDB retorna produtos sem parse correto dos atributos
 - **Interface**: Responsiva com paginação, busca e detalhes
 
 ### Database
@@ -63,13 +62,7 @@ environment:
   DB_TYPE: mysql    # ou 'mongo'
 ```
 
-## ⚠️ Limitação Conhecida
-
-**Frontend + MongoDB**: Os produtos aparecem na lista, mas os atributos não são parseados corretamente devido à falta de DIP no Angular. O backend funciona perfeitamente com ambos os bancos.
-
 ## 🎯 Próximos Passos
-
-- **DIP no Frontend**: Implementar adapters para compatibilidade completa com MongoDB
 - **Kubernetes**: Migração da orquestração Docker para Kubernetes
 
 ---
