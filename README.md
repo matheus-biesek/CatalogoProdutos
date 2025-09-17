@@ -21,7 +21,6 @@ Sistema completo de catálogo de produtos com backend NestJS, frontend Angular e
 - **API**: RESTful com endpoints para busca de produtos
 - **Documentação**: Swagger automático disponível em `/api/docs`
 - **Validação**: DTOs com class-validator para entrada de dados
-- **Logging**: Sistema de logs estruturado
 
 ### Frontend (Angular)
 - **Compatibilidade**: ✅ 100% funcional com MySQL e MongoDB
