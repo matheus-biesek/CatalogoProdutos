@@ -9,7 +9,7 @@ RUN pnpm install
 
 COPY . .
 
-RUN pnpm run build
+RUN pnpm run build --configuration=production
 
 FROM nginx:alpine
 

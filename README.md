@@ -21,7 +21,6 @@ Sistema completo de catálogo de produtos com backend NestJS, frontend Angular e
 - **API**: RESTful com endpoints para busca de produtos
 - **Documentação**: Swagger automático disponível em `/api/docs`
 - **Validação**: DTOs com class-validator para entrada de dados
-- **Logging**: Sistema de logs estruturado
 
 ### Frontend (Angular)
 - **Compatibilidade**: ✅ 100% funcional com MySQL e MongoDB
@@ -31,6 +30,11 @@ Sistema completo de catálogo de produtos com backend NestJS, frontend Angular e
 ### Database
 - **Scripts**: Inicialização automática com dados de exemplo para ambos os bancos
 - **Migração**: Scripts para popular bancos com dados de teste
+
+### Kubernetes
+- **Deploy**: Orquestração completa com k3s/Kubernetes
+- **Manifests**: Configuração para MySQL, backend e frontend
+- **Compatibilidade**: Linux (k3s) e Windows (Docker Desktop)
 
 ## 🚀 Execução Rápida
 
@@ -112,6 +116,8 @@ docker-compose down -v
 Para desenvolvimento sem Docker, consulte os READMEs específicos:
 - `back-end/README.md` - Configuração e execução do backend
 - `front-end/README.md` - Configuração e execução do frontend
+- `kubernetes/README.md` - Deploy com Kubernetes/k3s
+- `database/README.md` - Configurações e esquema do MySql e Mongo
 
 ## 🎯 Funcionalidades Implementadas
 
@@ -120,9 +126,7 @@ Para desenvolvimento sem Docker, consulte os READMEs específicos:
 - ✅ **Documentação**: Swagger automático com todos os endpoints
 - ✅ **Multi-banco**: Suporte transparente para MySQL e MongoDB
 - ✅ **Docker**: Ambiente completo containerizado
-
-## 🚀 Próximos Passos
-- **Kubernetes**: Migração da orquestração Docker para Kubernetes
+- ✅ **Kubernets**: Orquestração do front end, back end e MySql.
 
 ---
 
