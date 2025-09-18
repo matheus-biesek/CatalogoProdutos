@@ -193,7 +193,7 @@ O projeto inclui suporte completo ao Docker:
 docker build -t catalogo-backend .
 
 # Executar com docker-compose (inclui MySQL/MongoDB)
-docker-compose up -d
+docker compose up -d
 ```
 
 ## 🎯 Padrões Implementados

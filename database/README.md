@@ -44,13 +44,13 @@ database/
 
 ```bash
 # Subir MySQL + PHPMyAdmin
-docker-compose up mysql phpmyadmin
+docker compose up mysql phpmyadmin
 
 # Subir MongoDB + Mongo Express
-docker-compose up mongodb mongo-express
+docker compose up mongodb mongo-express
 
 # Subir ambos os bancos
-docker-compose up
+docker compose up
 ```
 
 ### Opção 2: Executar Scripts Manualmente
@@ -132,7 +132,7 @@ db.produtos.createIndex({ "quantidade_em_stock": 1 });
 
 ### Verificar Status dos Containers
 ```bash
-docker-compose ps
+docker compose ps
 ```
 
 ### Ver Logs
@@ -147,10 +147,10 @@ docker logs mongodb
 ### Parar Serviços
 ```bash
 # Parar todos
-docker-compose down
+docker compose down
 
 # Parar e remover volumes
-docker-compose down -v
+docker compose down -v
 ```
 
 ### Backup e Restore
@@ -189,7 +189,7 @@ Para produção:
 - **mysql_data**: Persistência de dados MySQL
 - **mongodb_data**: Persistência de dados MongoDB
 
-Os dados persistem mesmo após parar os containers, mas são removidos com `docker-compose down -v`.
+Os dados persistem mesmo após parar os containers, mas são removidos com `docker compose down -v`.
 
 ## 🛠️ Troubleshooting
 
