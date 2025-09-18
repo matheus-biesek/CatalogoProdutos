@@ -45,10 +45,10 @@ git clone https://github.com/matheus-biesek/CatalogoProdutos.git
 cd CatalogoProdutos
 
 # Subir toda a stack
-docker-compose up -d
+docker compose up -d
 
 # Verificar status dos serviços
-docker-compose ps
+docker compose ps
 ```
 
 ### Acessos da aplicação
@@ -84,26 +84,26 @@ services:
 
 **Reinicie o backend após a alteração:**
 ```bash
-docker-compose restart backend
+docker compose restart backend
 ```
 
 ## 🛠️ Comandos Úteis
 
 ```bash
 # Logs dos serviços
-docker-compose logs -f backend
-docker-compose logs -f frontend
+docker compose logs -f backend
+docker compose logs -f frontend
 
 # Parar todos os serviços
-docker-compose down
+docker compose down
 
 # Rebuild completo
-docker-compose down
-docker-compose build --no-cache
-docker-compose up -d
+docker compose down
+docker compose build --no-cache
+docker compose up -d
 
 # Limpar volumes (remove dados dos bancos)
-docker-compose down -v
+docker compose down -v
 ```
 
 ## 🔧 Desenvolvimento Local
